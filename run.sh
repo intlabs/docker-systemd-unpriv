@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo date
 
-CONTAINER=$(sudo docker run -it 80:80 -p 443:443 -p 3000:3000 --hostname="pxe.cannyos.local" maci/systemd )
+CONTAINER=$(sudo docker run -it -p 80:80 -p 443:443 -p 3000:3000 --hostname="pxe.cannyos.local" maci/systemd )
 docker kill ${CONTAINER}
 docker rm ${CONTAINER}
 
