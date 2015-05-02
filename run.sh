@@ -8,3 +8,6 @@ echo "to enter docker container run:
 docker exec -t -i ${CONTAINER} /bin/bash
 docker kill ${CONTAINER}
 docker rm ${CONTAINER}
+
+#RAILS_ENV=production bundle exec rake permissions:reset
+#./script/rails s -e production
