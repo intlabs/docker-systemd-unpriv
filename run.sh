@@ -6,4 +6,5 @@ echo ${CONTAINER}
 echo "to enter docker container run: 
         docker exec -t -i ${CONTAINER} /bin/bash"
 docker exec -t -i ${CONTAINER} /bin/bash
+docker kill ${CONTAINER}
 docker rm ${CONTAINER}
