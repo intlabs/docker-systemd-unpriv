@@ -1,28 +1,19 @@
-FROM centos:centos7
-MAINTAINER Marcel Wysocki "maci.stgn@gmail.com"
+FROM fedora:rawhide
+MAINTAINER http://fedoraproject.org/wiki/Cloud
+
 ENV container docker
 
-RUN yum -y update; yum clean all
+RUN yum -y update && yum clean all
 
-RUN yum -y swap -- remove fakesystemd -- install systemd systemd-libs
+RUN yum -y install systemd; yum clean all; \
+(cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-RUN systemctl mask dev-mqueue.mount dev-hugepages.mount \
-    systemd-remount-fs.service sys-kernel-config.mount \
-    sys-kernel-debug.mount sys-fs-fuse-connections.mount
-RUN systemctl mask display-manager.service systemd-logind.service
-RUN systemctl disable graphical.target; systemctl enable multi-user.target
-
-ADD dbus.service /etc/systemd/system/dbus.service
-
-RUN yum -y install epel-release http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm http://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm
-RUN yum -y install foreman-installer
-
-RUN yum -y install hostname
-#RUN yum -y install openssh-server initscripts; yum clean all
-#RUN echo "UseDNS no" >> /etc/ssh/sshd_config
-#RUN sed -i 's/UsePrivilegeSeparation sandbox/UsePrivilegeSeparation no/' /etc/ssh/sshd_config
-
-VOLUME ["/sys/fs/cgroup"]
-VOLUME ["/run"]
-
-CMD  ["/usr/lib/systemd/systemd"]
+VOLUME [ "/sys/fs/cgroup" ]
+CMD ["/usr/sbin/init"]
