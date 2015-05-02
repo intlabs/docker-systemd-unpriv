@@ -17,6 +17,7 @@ ADD dbus.service /etc/systemd/system/dbus.service
 RUN yum -y install epel-release http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm http://yum.theforeman.org/releases/latest/el7/x86_64/foreman-release.rpm
 RUN yum -y install foreman-installer
 
+RUN yum -y install hostname
 #RUN yum -y install openssh-server initscripts; yum clean all
 #RUN echo "UseDNS no" >> /etc/ssh/sshd_config
 #RUN sed -i 's/UsePrivilegeSeparation sandbox/UsePrivilegeSeparation no/' /etc/ssh/sshd_config
